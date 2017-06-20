@@ -1,11 +1,22 @@
 import { Component } from '@angular/core';
 import { JsonProviderService } from './json-provider.service'
 import { JsonTreeViewComponent  } from './json-tree-view/json-tree-view.component';
+import { JsonHelperService, Item } from './json-helper.service';
+import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap'
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+
+class ComponentItem implements Item {
+  key: string;
+  value: any;
+  title: string;
+  type: string;
+  isOpened: boolean;
+}
 
 @Component({
   selector: 'app-root',
@@ -14,10 +25,14 @@ import 'rxjs/add/operator/distinctUntilChanged';
 })
 export class AppComponent {
   private file:any;
-  private keys:string[];
+  private keys = [];
+  private selectedKeys = [];
+
   public model: any;
 
-  constructor(private jsonService: JsonProviderService) { 
+  constructor(
+    private jsonService: JsonProviderService,
+    private helper: JsonHelperService) { 
   }
 
   fileEvent(fileInput: any){
@@ -29,8 +44,9 @@ export class AppComponent {
             this.file = obj;
             console.log(this.file); 
 
-            //then the keys from the object
-            this.keys = Object.keys(obj);
+            this.helper.getkeysRecursive(obj, this.keys);
+            this.keys = Array.from(new Set(this.keys));
+            this.selectedKeys = [];
             console.log(this.keys); 
           }
       );
@@ -42,4 +58,12 @@ export class AppComponent {
       .distinctUntilChanged()
       .map(term => term.length < 2 ? []
         : this.keys.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+
+  filter(event:NgbTypeaheadSelectItemEvent) { 
+    console.log(event.item);
+    if(!this.selectedKeys.find(key => key === event.item)) {
+      this.selectedKeys.push(event.item);
+      console.log(this.selectedKeys);
+    }
+  }
 }

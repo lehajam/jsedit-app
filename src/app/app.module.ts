@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { JsonTreeViewComponent } from './json-tree-view/json-tree-view.component';
 
 import { JsonProviderService } from './json-provider.service';
+import { JsonHelperService } from './json-helper.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,9 @@ import { JsonProviderService } from './json-provider.service';
     NgbModule.forRoot(),
     NgbTypeaheadModule
   ],
-  providers: [JsonProviderService],
+  providers: [
+    JsonProviderService,
+    JsonHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

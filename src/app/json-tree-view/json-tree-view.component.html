@@ -2,7 +2,7 @@
 
   <div
     *ngFor="let item of asset;"
-    [ngClass]="['item__type--' + item.type, 'is-object-' + isObject(item), 'is-opened-' + item.isOpened]"
+    [ngClass]="['item__type--' + item.type, 'is-object-' + this.helper.isObject(item), 'is-opened-' + item.isOpened]"
     class="item"
   >
 
@@ -11,7 +11,7 @@
       (click)="clickHandle(item)">
       <div
         class="toggler"
-        *ngIf="isObject(item)"></div>
+        *ngIf="this.helper.isObject(item)"></div>
 
       <span class="item__key">{{item.key}}</span><span class="item__dot">:</span>
 
@@ -23,7 +23,7 @@
 
     <div
       class="inner-item"
-      *ngIf="isObject(item)"
+      *ngIf="this.helper.isObject(item)"
       [hidden]="!item.isOpened">
       <json-tree-view [json]="item.value" [expanded]="expanded"></json-tree-view>
     </div>
