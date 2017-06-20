@@ -2,19 +2,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap'
 
 import { AppComponent } from './app.component';
+import { JsonTreeViewComponent } from './json-tree-view/json-tree-view.component';
+
+import { JsonProviderService } from './json-provider.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    JsonTreeViewComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    NgbModule.forRoot(),
+    NgbTypeaheadModule
   ],
-  providers: [],
+  providers: [JsonProviderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
