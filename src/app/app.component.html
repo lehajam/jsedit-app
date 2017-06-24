@@ -1,23 +1,28 @@
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+<nav class="navbar navbar-toggleable-md" style="background-color: #e3f2fd;">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">
+    <img src="../assets/logo-tata.png" width="50" height="50" alt="">
+  </a>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <label class="btn btn-default btn-file">
-            Load
-            <input type="file" style="display: none;" (change)="fileEvent($event)">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <label class="custom-file">
+          <input type="file" id="file" class="custom-file-input" (change)="fileEvent($event)">
+          <span class="custom-file-control"></span>
         </label>
       </li>
       <li class="nav-item">
-        <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" (selectItem)="filter($event)"/>
+        <label class="input-group">
+          <span class="input-group-addon"><i class="fa fa-search fa-fw" aria-hidden="true"></i></span>
+          <input id="typeahead-basic" type="text" class="form-control" style="width: 500px;" [(ngModel)]="model" [ngbTypeahead]="search" (selectItem)="filter($event)" >
+        </label>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save</button>
+    <form class="form-inline">
+      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Save</button>
     </form>
   </div>
 </nav>
@@ -27,6 +32,12 @@
     <div class="card-block" >
       <span class="badge badge-primary badge-margin" *ngFor="let key of selectedKeys;">{{key}}</span> 
     </div>
+  </div>
+
+  <div class="input-group input-group-lg input-group-edit">
+    <span class="input-group-addon" id="sizing-addon1">ip-devicehiihiihihihihii</span>
+    <input type="text" class="form-control input-edit" placeholder="Username" aria-describedby="sizing-addon1">
+    <button type="button" class="btn btn-primary">Success</button>
   </div>
 
   <div class="row" >
@@ -41,7 +52,7 @@
     <div class="col-sm-6">
       <div class="card card-outline-primary">
         <div class="card-block">
-          <!--<json-tree-view [json]="file" ></json-tree-view>-->
+          <json-tree-view [json]="filteredFile" [filterKeys]="selectedKeys" ></json-tree-view>
         </div>
       </div>
     </div>

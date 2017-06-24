@@ -100,7 +100,25 @@ export class JsonHelperService {
     });
   }
 
-  public filter(root:object, selectedKeys:string[]) {
-    
+  public filter(root:object, selectedKeys:string[]) : Boolean {
+    let keysToDelete = [];
+    Object.keys(root).forEach((key) => {
+      if (!selectedKeys.find(k => k === key)) {
+        if (_.isObject(root[key])) {
+          if(!this.filter(root[key], selectedKeys)) {
+            keysToDelete.push(key);
+          }
+        }
+        else {
+          keysToDelete.push(key);
+        }
+      }
+    });  
+
+    keysToDelete.forEach((key) => {
+      delete root[key];
+    });
+
+    return keysToDelete.length < Object.keys(root).length;
   }
 }

@@ -3,7 +3,7 @@
 // The easiest way to deal with them for now is to disable linting in those files :(
 
 /* tslint:disable */
-import { Component, OnInit, OnChanges, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewEncapsulation, Pipe, PipeTransform } from '@angular/core';
 import { JsonHelperService, Item } from '../json-helper.service';
 import * as _ from 'lodash';
 
@@ -31,6 +31,8 @@ export class JsonTreeViewComponent implements OnInit {
     set expanded(value: boolean) {
       this._expanded = value;
     }
+  @Input() filterKeys: string[];
+  
   asset: Array<ComponentItem> = [];
   private _expanded: boolean = false;
 
@@ -67,4 +69,19 @@ export class JsonTreeViewComponent implements OnInit {
     item.isOpened = !item.isOpened;
   }
 
+}
+
+@Pipe({
+    name: 'keyfilter'
+})
+export class KeyFilterPipe implements PipeTransform {
+    transform(items: ComponentItem[], keys: string[]): any {
+      if(!items) {
+        console.log(keys);
+        return items.filter(
+          item => {
+            keys.find(key => key === item.key || _.includes(JSON.stringify(item.value), key));
+        });
+      }
+    }
 }

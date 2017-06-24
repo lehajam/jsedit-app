@@ -25,6 +25,8 @@ class ComponentItem implements Item {
 })
 export class AppComponent {
   private file:any;
+  private filteredFile:any;
+
   private keys = [];
   private selectedKeys = [];
 
@@ -46,6 +48,7 @@ export class AppComponent {
 
             this.helper.getkeysRecursive(obj, this.keys);
             this.keys = Array.from(new Set(this.keys));
+            
             this.selectedKeys = [];
             console.log(this.keys); 
           }

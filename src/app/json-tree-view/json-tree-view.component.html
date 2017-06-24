@@ -25,7 +25,7 @@
       class="inner-item"
       *ngIf="this.helper.isObject(item)"
       [hidden]="!item.isOpened">
-      <json-tree-view [json]="item.value" [expanded]="expanded"></json-tree-view>
+      <json-tree-view [json]="item.value" [expanded]="expanded" ></json-tree-view>
     </div>
 
   </div>
