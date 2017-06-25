@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import * as _ from 'lodash';
 
 @Injectable()
@@ -11,9 +12,11 @@ export class JsonProviderService {
   private fileSubject= new BehaviorSubject({});
   public readonly fileObserver = this.fileSubject.asObservable();
 
-  private filterKeySubject= new BehaviorSubject("");
+  private filterKeySubject = new BehaviorSubject("");
   public readonly filterKeyObserver = this.filterKeySubject.asObservable();
 
+  private updateSubject = new BehaviorSubject(null);
+  public readonly updateObserver = this.updateSubject.asObservable();
 
   constructor() { 
     this.reader.onload = () => {
@@ -32,30 +35,8 @@ export class JsonProviderService {
   }
 
   public update(lookupKey: string, newValue:any) {
-    this.updateRecursive(this.fileObject, lookupKey, newValue);
-    
-    console.log(this.fileObject);
-    this.fileObject = JSON.parse(JSON.stringify(this.fileObject));
-    this.fileSubject.next(this.fileObject);
-  }
-
-  private updateRecursive(rootObject:any, lookupKey: string, newValue:any) {
-    Object.keys(rootObject).forEach((key) => {
-      if (_.isObject(rootObject[key])) {
-        this.updateRecursive(rootObject[key], lookupKey, newValue);
-      }
-
-      if (key === lookupKey) {
-        if (_.isNumber(newValue)) {
-          rootObject[key] = +newValue; 
-        } else if (_.isBoolean(newValue)) {
-          rootObject[key] = (newValue.toLowerCase() == "true")
-        } else if (_.isDate(newValue)) {
-
-        } else if (_.isString(newValue)) {
-          rootObject[key] = newValue; 
-        }
-      }
-    });
+    let updateObject = {key:lookupKey, value:newValue};
+    this.updateSubject.next(updateObject);
+    console.log(updateObject);
   }
 }

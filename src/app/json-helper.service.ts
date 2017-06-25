@@ -22,7 +22,7 @@ export class JsonHelperService {
     return tree;
   }
 
-  private createItem(
+  public createItem(
     key: any, 
     value: any, 
     expanded: boolean): Item {

@@ -3,18 +3,18 @@
 // The easiest way to deal with them for now is to disable linting in those files :(
 
 /* tslint:disable */
-import { Component, OnInit, OnChanges, Input, ViewEncapsulation, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Pipe, PipeTransform } from '@angular/core';
 import { JsonHelperService, Item } from '../json-helper.service';
+import { JsonProviderService } from '../json-provider.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import * as _ from 'lodash';
 
 @Component({
   selector: 'json-tree-view',
   templateUrl: './json-tree-view.component.html',
-  styleUrls: ['./json-tree-view.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./json-tree-view.component.css']
 })
 export class JsonTreeViewComponent implements OnInit {
-
   @Input() json: Array<any>|Object|any;
   @Input()
     get expanded(): boolean {
@@ -24,12 +24,32 @@ export class JsonTreeViewComponent implements OnInit {
       this._expanded = value;
     }
   @Input() filterKeys: string[];
-  
+  @Output() change: EventEmitter<Item> = new EventEmitter();
+
   asset: Array<Item> = [];
   private _expanded: boolean = false;
 
-  constructor(private helper: JsonHelperService) { }
+  constructor(
+    private jsonService: JsonProviderService,
+    private helper: JsonHelperService) {
 
+  }
+
+  ngOnInit() {
+    this.jsonService.updateObserver.subscribe(
+      update => {
+        if(this.asset) {
+          for (var index = 0; index < this.asset.length; index++) {
+            if(this.asset[index].key == update.key) {
+              this.json[update.key] = update.value;
+              this.asset = this.helper.createTree(this.json, this.expanded);
+              this.change.emit(this.json);
+            }
+          }
+        }
+    });
+  }
+  
   ngOnChanges() {
     // Do nothing without data
     if (!_.isObject(this.json) && !_.isArray(this.json)) {
@@ -42,9 +62,6 @@ export class JsonTreeViewComponent implements OnInit {
     console.log(this.asset); 
   }
 
-  ngOnInit() {
-  }
-
   clickHandle(item: Item) {
     if (!this.helper.isObject(item)) {
       return;
@@ -52,19 +69,28 @@ export class JsonTreeViewComponent implements OnInit {
     item.isOpened = !item.isOpened;
   }
 
+  //propagate the change to parent
+  onChildUpdate(jsonChild, key:string) {
+    if(this.asset) {
+      for (var index = 0; index < this.asset.length; index++) {
+        if(this.asset[index].key == key) {
+          this.json[key] = jsonChild;
+          this.asset = this.helper.createTree(this.json, this.expanded);
+          this.change.emit(this.json);
+        }
+      }
+    }
+  }
 }
 
 @Pipe({
     name: 'keyfilter'
 })
 export class KeyFilterPipe implements PipeTransform {
-    transform(items: Item[], keys: string[]): any {
+    transform(items: Item[], key: string): any {
       if(!items) {
-        console.log(keys);
-        return items.filter(
-          item => {
-            keys.find(key => key === item.key || _.includes(JSON.stringify(item.value), key));
-        });
+        console.log(key);
+        return items.filter(item => key === item.key);
       }
     }
 }
