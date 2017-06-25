@@ -10,12 +10,14 @@ import { JsonTreeViewComponent, KeyFilterPipe } from './json-tree-view/json-tree
 
 import { JsonProviderService } from './json-provider.service';
 import { JsonHelperService } from './json-helper.service';
+import { FieldEditorComponent } from './field-editor/field-editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     JsonTreeViewComponent,
-    KeyFilterPipe
+    KeyFilterPipe,
+    FieldEditorComponent
   ],
   imports: [
     BrowserModule,

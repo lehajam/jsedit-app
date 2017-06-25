@@ -28,17 +28,7 @@
 </nav>
 <div class="card-main">
   
-  <div class="card card-badge" *ngIf="selectedKeys.length > 0">
-    <div class="card-block" >
-      <span class="badge badge-primary badge-margin" *ngFor="let key of selectedKeys;">{{key}}</span> 
-    </div>
-  </div>
-
-  <div class="input-group input-group-lg input-group-edit">
-    <span class="input-group-addon" id="sizing-addon1">ip-devicehiihiihihihihii</span>
-    <input type="text" class="form-control input-edit" placeholder="Username" aria-describedby="sizing-addon1">
-    <button type="button" class="btn btn-primary">Success</button>
-  </div>
+  <app-field-editor></app-field-editor>
 
   <div class="row" >
     <div class="col-sm-6">

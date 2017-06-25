@@ -28,8 +28,6 @@ export class AppComponent {
   private filteredFile:any;
 
   private keys = [];
-  private selectedKeys = [];
-
   public model: any;
 
   constructor(
@@ -49,7 +47,6 @@ export class AppComponent {
             this.helper.getkeysRecursive(obj, this.keys);
             this.keys = Array.from(new Set(this.keys));
             
-            this.selectedKeys = [];
             console.log(this.keys); 
           }
       );
@@ -64,9 +61,6 @@ export class AppComponent {
 
   filter(event:NgbTypeaheadSelectItemEvent) { 
     console.log(event.item);
-    if(!this.selectedKeys.find(key => key === event.item)) {
-      this.selectedKeys.push(event.item);
-      console.log(this.selectedKeys);
-    }
+    this.jsonService.addFilterKey(event.item);
   }
 }

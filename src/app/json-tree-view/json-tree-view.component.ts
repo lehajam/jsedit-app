@@ -7,14 +7,6 @@ import { Component, OnInit, OnChanges, Input, ViewEncapsulation, Pipe, PipeTrans
 import { JsonHelperService, Item } from '../json-helper.service';
 import * as _ from 'lodash';
 
-class ComponentItem implements Item {
-  key: string;
-  value: any;
-  title: string;
-  type: string;
-  isOpened: boolean;
-}
-
 @Component({
   selector: 'json-tree-view',
   templateUrl: './json-tree-view.component.html',
@@ -33,7 +25,7 @@ export class JsonTreeViewComponent implements OnInit {
     }
   @Input() filterKeys: string[];
   
-  asset: Array<ComponentItem> = [];
+  asset: Array<Item> = [];
   private _expanded: boolean = false;
 
   constructor(private helper: JsonHelperService) { }
@@ -45,24 +37,15 @@ export class JsonTreeViewComponent implements OnInit {
       return;
     }
 
-    console.log(this.json);
-
-    var objectOrArrayAction = (item: ComponentItem) : void => {
-      item.isOpened = this.expanded;
-    }
-    
-    this.asset = this.helper.createTree<ComponentItem>(
-      this.json, 
-      { isOpened: false },
-      objectOrArrayAction, 
-      objectOrArrayAction);
+    console.log(this.json);   
+    this.asset = this.helper.createTree(this.json, this.expanded);
     console.log(this.asset); 
   }
 
   ngOnInit() {
   }
 
-  clickHandle(item: ComponentItem) {
+  clickHandle(item: Item) {
     if (!this.helper.isObject(item)) {
       return;
     }
@@ -75,7 +58,7 @@ export class JsonTreeViewComponent implements OnInit {
     name: 'keyfilter'
 })
 export class KeyFilterPipe implements PipeTransform {
-    transform(items: ComponentItem[], keys: string[]): any {
+    transform(items: Item[], keys: string[]): any {
       if(!items) {
         console.log(keys);
         return items.filter(

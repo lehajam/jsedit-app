@@ -6,6 +6,7 @@ export interface Item {
   value: any;
   title: string;
   type: string;
+  isOpened: boolean;
 }
 
 @Injectable()
@@ -13,29 +14,26 @@ export class JsonHelperService {
   constructor() {
    }
 
-  public createTree<T>(json: any, proto:object, objectAction: (Item) => void, arrayAction: (Item) => void) : Array<T> {
+  public createTree(json: any, isExpanded:boolean) : Array<Item> {
     let tree = [];
     Object.keys(json).forEach((key) => {
-      tree.push(this.createItem(proto, key, json[key], objectAction, arrayAction));
+      tree.push(this.createItem(key, json[key], isExpanded));
     });
     return tree;
   }
 
   private createItem(
-    proto:object,
     key: any, 
     value: any, 
-    objectAction: (Item) => void, 
-    arrayAction: (Item) => void): Item {
+    expanded: boolean): Item {
     
-    let item = Object.setPrototypeOf(
-      {
-        key: key || '""', // original key or empty string
-        value: value, // original value
-        title: value, // title by default
-        type: undefined
-      }, 
-      proto);
+    let item: Item = {
+      key: key || '""', // original key or empty string
+      value: value, // original value
+      title: value, // title by default
+      type: undefined,
+      isOpened: false
+    };
 
     if (_.isString(item.value)) {
       item.type = 'string';
@@ -61,13 +59,13 @@ export class JsonHelperService {
     else if (_.isArray(item.value)) {
       item.type = 'array';
       item.title = `Array[${item.value.length}] ${JSON.stringify(item.value)}`;
-      arrayAction(item);
+      item.isOpened = expanded;
     }
 
     else if (_.isObject(item.value)) {
       item.type = 'object';
       item.title = `Object ${JSON.stringify(item.value)}`;
-      objectAction(item);
+      item.isOpened = expanded;
     }
 
     else if (item.value === null) {
@@ -93,7 +91,6 @@ export class JsonHelperService {
     Object.keys(root).forEach((key) => {
       if (_.isObject(root[key])) {
         this.getkeysRecursive(root[key], keys)
-        keys.push(key);
       } else {
         keys.push(key);
       }
