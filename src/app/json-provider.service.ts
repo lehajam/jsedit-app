@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 import * as _ from 'lodash';
 
@@ -15,7 +16,7 @@ export class JsonProviderService {
   private filterKeySubject = new BehaviorSubject("");
   public readonly filterKeyObserver = this.filterKeySubject.asObservable();
 
-  private updateSubject = new BehaviorSubject(null);
+  private updateSubject = new Subject<any>();
   public readonly updateObserver = this.updateSubject.asObservable();
 
   constructor() { 
@@ -35,7 +36,13 @@ export class JsonProviderService {
   }
 
   public update(lookupKey: string, newValue:any) {
-    let updateObject = {key:lookupKey, value:newValue};
+    let updateObject = {type:"update", key:lookupKey, value:newValue};
+    this.updateSubject.next(updateObject);
+    console.log(updateObject);
+  }
+
+  public rollBack(lookupKey: string) {
+    let updateObject = {type:"rollback", key:lookupKey};
     this.updateSubject.next(updateObject);
     console.log(updateObject);
   }

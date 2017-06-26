@@ -3,7 +3,7 @@
 // The easiest way to deal with them for now is to disable linting in those files :(
 
 /* tslint:disable */
-import { Component, OnInit, Input, Output, EventEmitter, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, Pipe, PipeTransform } from '@angular/core';
 import { JsonHelperService, Item } from '../json-helper.service';
 import { JsonProviderService } from '../json-provider.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -15,7 +15,16 @@ import * as _ from 'lodash';
   styleUrls: ['./json-tree-view.component.css']
 })
 export class JsonTreeViewComponent implements OnInit {
-  @Input() json: Array<any>|Object|any;
+  @Input()
+  get json(): Array<any>|Object|any {
+    return this._json;
+  }
+  set json(value: Array<any>|Object|any) {
+    this._json = value;
+    if(value){
+      this.newjson = JSON.parse(JSON.stringify(value));
+    }
+  }
   @Input()
     get expanded(): boolean {
       return this._expanded;
@@ -23,42 +32,53 @@ export class JsonTreeViewComponent implements OnInit {
     set expanded(value: boolean) {
       this._expanded = value;
     }
-  @Input() filterKeys: string[];
   @Output() change: EventEmitter<Item> = new EventEmitter();
 
   asset: Array<Item> = [];
+  newjson: Array<any>|Object|any;
+
+  private _json: Array<any>|Object|any;
   private _expanded: boolean = false;
+  private ngChangesComplete: boolean = false;
 
   constructor(
     private jsonService: JsonProviderService,
     private helper: JsonHelperService) {
-
   }
 
   ngOnInit() {
     this.jsonService.updateObserver.subscribe(
       update => {
-        if(this.asset) {
-          for (var index = 0; index < this.asset.length; index++) {
-            if(this.asset[index].key == update.key) {
-              this.json[update.key] = update.value;
-              this.asset = this.helper.createTree(this.json, this.expanded);
-              this.change.emit(this.json);
+        for (var index = 0; index < this.asset.length; index++) {
+          if(this.asset[index].key == update.key) {
+            if(update.type =="update") {
+              this.newjson[update.key] = this.helper.cast(this.asset[index].type, update.value);
+              this.asset[index] = this.helper.createItem(update.key, update.value, this.asset[index].isOpened);
+            } else if (update.type =="rollback") {
+              this.newjson[update.key] = this.json[update.key];
+              this.asset[index] = this.helper.createItem(update.key, this.json[update.key], this.asset[index].isOpened);
             }
+
+            this.change.emit(this.newjson);
+            console.log(this.newjson);
           }
         }
     });
   }
   
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     // Do nothing without data
+    this.ngChangesComplete = false;
     if (!_.isObject(this.json) && !_.isArray(this.json)) {
       this.asset = [];
+      this.ngChangesComplete = true;
       return;
     }
 
-    console.log(this.json);   
     this.asset = this.helper.createTree(this.json, this.expanded);
+    this.ngChangesComplete = true;
+
+    console.log(this.json);   
     console.log(this.asset); 
   }
 
@@ -71,12 +91,12 @@ export class JsonTreeViewComponent implements OnInit {
 
   //propagate the change to parent
   onChildUpdate(jsonChild, key:string) {
-    if(this.asset) {
+    if(this.ngChangesComplete) {
       for (var index = 0; index < this.asset.length; index++) {
         if(this.asset[index].key == key) {
-          this.json[key] = jsonChild;
-          this.asset = this.helper.createTree(this.json, this.expanded);
-          this.change.emit(this.json);
+          this.newjson[key] = jsonChild;
+          this.asset[index] = this.helper.createItem(key, jsonChild, this.asset[index].isOpened);
+          this.change.emit(this.newjson);
         }
       }
     }

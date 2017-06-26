@@ -46,9 +46,15 @@ export class FieldEditorComponent implements OnInit {
   deleteBadge(event, index) {
     console.log(index);
     if (index !== -1) {
+      let deletedKey = this.filterKeys[index];
       this.filterKeys.splice(index, 1);
-      this.currentKey = "";
-      this.isSelected = false;
+      this.jsonService.rollBack(deletedKey);
+
+      //we might be deleting the item which isnt currently selected
+      if(this.currentKey == deletedKey) {
+        this.currentKey = "";
+        this.isSelected = false;
+      }
     }
   }
 

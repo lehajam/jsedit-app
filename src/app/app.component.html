@@ -1,50 +1,27 @@
-<nav class="navbar navbar-toggleable-md" style="background-color: #e3f2fd;">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <a class="navbar-brand" href="#">
-    <img src="../assets/logo-tata.png" width="50" height="50" alt="">
-  </a>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item">
-        <label class="custom-file">
-          <input type="file" id="file" class="custom-file-input" (change)="fileEvent($event)">
-          <span class="custom-file-control"></span>
-        </label>
-      </li>
-      <li class="nav-item">
-        <label class="input-group">
-          <span class="input-group-addon"><i class="fa fa-search fa-fw" aria-hidden="true"></i></span>
-          <input id="typeahead-basic" type="text" class="form-control" style="width: 500px;" [(ngModel)]="model" [ngbTypeahead]="search" (selectItem)="filter($event)" >
-        </label>
-      </li>
-    </ul>
-    <form class="form-inline">
-      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Save</button>
-    </form>
-  </div>
+<nav class="navbar navbar-toggleable-md navbar-dark bg-primary">
+  <form class="form-inline margin-right">
+    <label class="btn btn-primary btn-space" (change)="fileEvent($event)">
+      <i class="fa fa-folder-open fa-2x" aria-hidden="true"></i>
+      <input type="file" style="display: none;">
+    </label>
+  </form>
+  <form class="form-inline">
+    <button class="btn btn-primary btn-space" type="submit">
+      <i class="fa fa-search fa-2x" aria-hidden="true"></i>
+    </button>
+    <input name="typeahead-basic" type="text" class="form-control input-search" [(ngModel)]="model" [ngbTypeahead]="search" (selectItem)="filter($event)"  >
+  </form>
+  <form class="form-inline">
+    <button class="btn btn-primary btn-space" type="submit" (click)="save()">
+      <i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i>
+    </button>
+  </form>
 </nav>
 <div class="card-main">
-  
   <app-field-editor></app-field-editor>
-
-  <div class="row" >
-    <div class="col-sm-6">
-      <div class="card card-outline-primary">
-        <div class="card-block">
-          <json-tree-view [json]="file" ></json-tree-view>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-sm-6">
-      <div class="card card-outline-primary">
-        <div class="card-block">
-          <json-tree-view [json]="filteredFile" [filterKeys]="selectedKeys" ></json-tree-view>
-        </div>
-      </div>
+  <div class="card card-outline-primary">
+    <div class="card-block">
+      <json-tree-view [json]="file"></json-tree-view>
     </div>
   </div>
 </div>

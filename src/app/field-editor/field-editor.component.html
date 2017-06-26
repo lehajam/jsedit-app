@@ -1,7 +1,10 @@
   <div class="card card-badge" *ngIf="filterKeys.length > 0">
     <div class="card-block" >
-      <button type="button" class="btn btn-outline-primary" 
-        *ngFor="let key of filterKeys;let i = index" (click)="selectBadge($event, i)">
+      <button type="button" 
+        *ngFor="let key of filterKeys;let i = index" (click)="selectBadge($event, i)"
+        [class.active]="key == currentKey"
+        class="btn btn-outline-primary button-margin" 
+        >
         {{key}}
         <span (click)="deleteBadge($event, i)">
           <a href="#">
@@ -13,7 +16,7 @@
   </div>
 
   <div class="input-group input-group-lg input-group-edit" *ngIf="isSelected">
-    <span class="input-group-addon" id="sizing-addon1">{{currentKey}}</span>
+    <span class="input-group-addon bg-primary text-white" id="sizing-addon1">{{currentKey}}</span>
     <input type="text" class="form-control input-edit" placeholder="New value for {{currentKey}}" aria-describedby="sizing-addon1" #updateInput>
     <button type="button" class="btn btn-primary" (click)="updateFileObject(updateInput.value)">Update</button>
   </div>

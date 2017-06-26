@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { JsonProviderService } from './json-provider.service'
 import { JsonTreeViewComponent  } from './json-tree-view/json-tree-view.component';
 import { JsonHelperService, Item } from './json-helper.service';
@@ -10,13 +10,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 
-class ComponentItem implements Item {
-  key: string;
-  value: any;
-  title: string;
-  type: string;
-  isOpened: boolean;
-}
+import * as fs from 'file-saver';
 
 @Component({
   selector: 'app-root',
@@ -25,10 +19,12 @@ class ComponentItem implements Item {
 })
 export class AppComponent {
   private file:any;
-  private filteredFile:any;
-
+  private fileName:string;
   private keys = [];
   public model: any;
+
+  @ViewChild(JsonTreeViewComponent)
+  private treeView: JsonTreeViewComponent;
 
   constructor(
     private jsonService: JsonProviderService,
@@ -42,6 +38,7 @@ export class AppComponent {
           (obj) => { 
             //first get the json object represented in the file
             this.file = obj;
+            this.fileName = fileInput.target.files[0].name; 
             console.log(this.file); 
 
             this.helper.getkeysRecursive(obj, this.keys);
@@ -62,5 +59,15 @@ export class AppComponent {
   filter(event:NgbTypeaheadSelectItemEvent) { 
     console.log(event.item);
     this.jsonService.addFilterKey(event.item);
+  }
+
+  save() {
+    let newFile = JSON.stringify(this.treeView.newjson);    
+    let blob = new Blob([newFile], { type: 'data:application/json;charset=utf-8' });
+    fs.saveAs(blob, this.fileName);
+    console.log(blob);
+
+    // Do we want the new file to become the old file ?
+    // this.file = JSON.parse(newFile);
   }
 }

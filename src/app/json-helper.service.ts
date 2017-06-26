@@ -32,7 +32,7 @@ export class JsonHelperService {
       value: value, // original value
       title: value, // title by default
       type: undefined,
-      isOpened: false
+      isOpened: expanded
     };
 
     if (_.isString(item.value)) {
@@ -81,6 +81,24 @@ export class JsonHelperService {
     item.title = '' + item.title; // defined type or 'undefined'
 
     return item;
+  }
+
+  public cast(type:string, value:string) :any {
+    switch (type) {
+      case 'string':
+        return value;
+      case 'number':
+        return +value;
+      case 'boolean':
+        return value.toLowerCase() == 'true';
+      case 'date':
+        return Date.parse(value);
+      case 'null':
+      case 'undefined':
+        return value;
+      default:
+        break;
+    }
   }
 
   public isObject(item: Item): boolean {
