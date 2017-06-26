@@ -8,8 +8,8 @@ import { TreeModule } from 'angular-tree-component';
 import { AppComponent } from './app.component';
 import { JsonTreeViewComponent, KeyFilterPipe } from './json-tree-view/json-tree-view.component';
 
-import { JsonProviderService } from './json-provider.service';
-import { JsonHelperService } from './json-helper.service';
+import { JsonProviderService } from './json-provider/json-provider.service';
+import { JsonHelperService } from './json-helper/json-helper.service';
 import { FieldEditorComponent } from './field-editor/field-editor.component';
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { JsonProviderService } from './json-provider.service'
 import { JsonTreeViewComponent  } from './json-tree-view/json-tree-view.component';
-import { JsonHelperService, Item } from './json-helper.service';
+import { JsonProviderService } from './json-provider/json-provider.service'
+import { JsonHelperService, Item } from './json-helper/json-helper.service';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap'
 
 import {Observable} from 'rxjs/Observable';

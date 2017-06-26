@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { JsonProviderService } from '../json-provider.service'
+import { JsonProviderService } from '../json-provider/json-provider.service'
 
 @Component({
   selector: 'app-field-editor',
