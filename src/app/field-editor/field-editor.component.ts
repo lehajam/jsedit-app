@@ -7,8 +7,8 @@ import { JsonProviderService } from '../json-provider/json-provider.service'
   styleUrls: ['./field-editor.component.css']
 })
 export class FieldEditorComponent implements OnInit {
-  private filterKeys = [];
-  private isSelected = false;
+  filterKeys = [];
+  isSelected = false;
   private currentKey: string;
   @ViewChild("updateInput") updateInput;
 
@@ -43,7 +43,6 @@ export class FieldEditorComponent implements OnInit {
         this.isSelected = false;        
       }
 
-      this
       this.jsonService.addFilterKey(this.currentKey);
     }    
   }

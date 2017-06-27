@@ -18,11 +18,12 @@ import * as fs from 'file-saver';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  private file:any;
-  private fileName:string;
+  file: any;
+  activeFilter = false;
+
+  private fileName: string;
   private keys = [];
   public model: any;
-  private activeFilter = false;
   
   @ViewChild(JsonTreeViewComponent)
   private treeView: JsonTreeViewComponent;

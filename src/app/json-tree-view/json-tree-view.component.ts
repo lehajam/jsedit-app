@@ -34,13 +34,13 @@ export class JsonTreeViewComponent implements OnInit {
     }
   @Output() change: EventEmitter<Item> = new EventEmitter();
 
+  filter: string;
   asset: Array<Item> = [];
   newjson: Array<any>|Object|any;
 
   private _json: Array<any>|Object|any;
   private _expanded: boolean = false;
   private ngChangesComplete: boolean = false;
-  private filter: string;
 
   constructor(
     private jsonService: JsonProviderService,
