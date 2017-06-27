@@ -40,6 +40,7 @@ export class FieldEditorComponent implements OnInit {
         this.currentKey = "";
         this.isSelected = false;        
       }
+      this.jsonService.addFilterKey(this.currentKey);
     }    
   }
 
@@ -54,6 +55,7 @@ export class FieldEditorComponent implements OnInit {
       if(this.currentKey == deletedKey) {
         this.currentKey = "";
         this.isSelected = false;
+        this.jsonService.addFilterKey(this.currentKey);
       }
     }
   }

@@ -40,6 +40,7 @@ export class JsonTreeViewComponent implements OnInit {
   private _json: Array<any>|Object|any;
   private _expanded: boolean = false;
   private ngChangesComplete: boolean = false;
+  private filter: string;
 
   constructor(
     private jsonService: JsonProviderService,
@@ -53,17 +54,22 @@ export class JsonTreeViewComponent implements OnInit {
           if(this.asset[index].key == update.key) {
             if(update.type =="update") {
               this.newjson[update.key] = this.helper.cast(this.asset[index].type, update.value);
-              this.asset[index] = this.helper.createItem(update.key, update.value, this.asset[index].isOpened);
             } else if (update.type =="rollback") {
               this.newjson[update.key] = this.json[update.key];
-              this.asset[index] = this.helper.createItem(update.key, this.json[update.key], this.asset[index].isOpened);
             }
 
+            this.asset = this.helper.createTree(this.newjson, this.expanded);
             this.change.emit(this.newjson);
             console.log(this.newjson);
           }
         }
     });
+
+    this.jsonService.filterKeyObserver.subscribe(
+      key => {
+        this.filter = key;
+      }
+    );
   }
   
   ngOnChanges(changes: SimpleChanges) {
@@ -108,9 +114,11 @@ export class JsonTreeViewComponent implements OnInit {
 })
 export class KeyFilterPipe implements PipeTransform {
     transform(items: Item[], key: string): any {
-      if(!items) {
-        console.log(key);
-        return items.filter(item => key === item.key);
-      }
+      console.log(key);
+
+      if(!items || !key || key == "")
+        return items;
+      
+      return items.filter(item => item.title.indexOf(key) !== -1 || item.key === key);
     }
 }

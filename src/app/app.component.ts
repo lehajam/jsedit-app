@@ -22,7 +22,8 @@ export class AppComponent {
   private fileName:string;
   private keys = [];
   public model: any;
-
+  private activeFilter = false;
+  
   @ViewChild(JsonTreeViewComponent)
   private treeView: JsonTreeViewComponent;
 
@@ -46,6 +47,12 @@ export class AppComponent {
             
             console.log(this.keys); 
           }
+      );
+
+      this.jsonService.filterKeyObserver.subscribe(
+        key => {
+          this.activeFilter = key && key != "";
+        }
       );
   }
 

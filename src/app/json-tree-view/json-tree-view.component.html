@@ -1,7 +1,7 @@
 <div class="agm-json-viewer">
 
   <div
-    *ngFor="let item of asset;"
+    *ngFor="let item of (asset | keyfilter:filter);"
     [ngClass]="['item__type--' + item.type, 'is-object-' + this.helper.isObject(item), 'is-opened-' + item.isOpened]"
     class="item"
   >

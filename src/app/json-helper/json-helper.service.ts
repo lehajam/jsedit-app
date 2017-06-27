@@ -32,7 +32,7 @@ export class JsonHelperService {
       value: value, // original value
       title: value, // title by default
       type: undefined,
-      isOpened: expanded
+      isOpened: false
     };
 
     if (_.isString(item.value)) {
