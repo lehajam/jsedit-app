@@ -1,7 +1,7 @@
 # jsedit-app
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.5.
-This app allows to edit a json file with multiple keys mappin to the same value. It is meant to be straight forward to use, simply load a json file and start typing in the text box keys you wish to edit and follow the flow.  
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.5.  
+This app allows to edit a json file with multiple keys mapping to the same value. It is meant to be straight forward to use, simply load a json file and start typing in the text box keys you wish to edit and follow the flow.  
 
 ## Development server
 
