@@ -9,14 +9,16 @@
         <span (click)="deleteBadge($event, i)">
           <a href="#">
             <i class="fa fa-remove pull-right" style="color: white;"></i>
-          </a>                      
+          </a>
         </span>
       </button>
     </div>
   </div>
 
-  <div class="input-group input-group-lg input-group-edit" *ngIf="isSelected">
-    <span class="input-group-addon bg-primary text-white">{{currentKey}}</span>
-    <input type="text" class="form-control input-edit" placeholder="New value for {{currentKey}}" aria-describedby="sizing-addon1" #updateInput>
+  <div class="input-group input-group-lg input-group-edit" style="margin-bottom: 20px;" *ngIf="isSelected">
+    <div class="input-group-prepend">
+      <span class="input-group-text bg-primary border-primary text-white">{{currentKey}}</span>
+    </div>
+    <input type="text" class="form-control input-edit border-primary" placeholder="New value for {{currentKey}}" aria-describedby="sizing-addon1" #updateInput>
     <button type="button" class="btn btn-primary" (click)="updateFileObject(updateInput.value)">Update</button>
   </div>

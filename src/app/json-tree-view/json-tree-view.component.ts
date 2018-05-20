@@ -6,7 +6,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, Pipe, PipeTransform } from '@angular/core';
 import { JsonHelperService, Item } from '../json-helper/json-helper.service';
 import { JsonProviderService } from '../json-provider/json-provider.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
 
 @Component({

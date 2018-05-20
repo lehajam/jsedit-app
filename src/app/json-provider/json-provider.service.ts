@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
 import * as _ from 'lodash';
 
@@ -20,7 +18,7 @@ export class JsonProviderService {
   public readonly updateObserver = this.updateSubject.asObservable();
 
   constructor() { 
-    this.reader.onload = () => {
+    this.reader.onload = (e) => {
       this.fileObject = JSON.parse(this.reader.result);
       this.fileSubject.next(this.fileObject);
     } 
